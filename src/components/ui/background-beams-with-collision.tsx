@@ -72,20 +72,21 @@ export const BackgroundBeamsWithCollision: React.FC<BackgroundBeamsWithCollision
     const beams = document.createElement("canvas");
     const context = beams.getContext("2d");
     let animationFrameId: number;
+    const parent = parentRef.current;
     
-    if (!parentRef.current || !context) return;
+    if (!parent || !context) return;
 
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
-        if (entry.target === parentRef.current) {
+        if (entry.target === parent) {
           beams.width = entry.contentRect.width;
           beams.height = entry.contentRect.height;
         }
       }
     });
 
-    resizeObserver.observe(parentRef.current);
-    parentRef.current.appendChild(beams);
+    resizeObserver.observe(parent);
+    parent.appendChild(beams);
 
     const particles: Particle[] = [];
     const numParticles = 50;
@@ -171,8 +172,8 @@ export const BackgroundBeamsWithCollision: React.FC<BackgroundBeamsWithCollision
     animate();
 
     return () => {
-      if (parentRef.current) {
-        parentRef.current.removeChild(beams);
+      if (parent) {
+        parent.removeChild(beams);
       }
       resizeObserver.disconnect();
       cancelAnimationFrame(animationFrameId);

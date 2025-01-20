@@ -7,7 +7,7 @@ import Link from "next/link";
 interface ToolPinProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
   description: string;
-  icon?: React.ReactNode;
+  icon: React.ReactNode;
   className?: string;
 }
 

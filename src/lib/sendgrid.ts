@@ -37,7 +37,7 @@ export async function sendWelcomeEmail(email: string) {
   
   const msg: MailDataRequired = {
     to: email,
-    from: process.env.SENDGRID_FROM_EMAIL || "sahaiburrahman@gmail.com",
+    from: process.env.SENDGRID_FROM_EMAIL || "hello@minitools.dev",
     subject: "Welcome to Mini Tools! 🚀",
     html: `
 <!DOCTYPE html>
