@@ -23,13 +23,12 @@ export const Typewriter = React.forwardRef<HTMLDivElement, TypewriterProps>(
     ...props 
   }, ref) => {
     const [displayText, setDisplayText] = useState("");
-    const [isTyping, setIsTyping] = useState(true);
     const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
       let timeout: NodeJS.Timeout;
 
-      if (isTyping && !isDeleting) {
+      if (!isDeleting) {
         if (displayText.length < text.length) {
           timeout = setTimeout(() => {
             setDisplayText(text.slice(0, displayText.length + 1));
@@ -52,7 +51,7 @@ export const Typewriter = React.forwardRef<HTMLDivElement, TypewriterProps>(
       }
 
       return () => clearTimeout(timeout);
-    }, [displayText, isTyping, isDeleting, text, typingSpeed, deletingSpeed, delayBetweenLoops]);
+    }, [displayText, isDeleting, text, typingSpeed, deletingSpeed, delayBetweenLoops]);
 
     return (
       <div 
