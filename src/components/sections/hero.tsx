@@ -61,50 +61,54 @@ export const Hero = () => {
         >
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
             <motion.div 
-              className="relative group"
+              className="relative group cursor-pointer"
               whileHover={{ y: -5 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-violet-500/10 to-indigo-500/10 group-hover:opacity-100 opacity-0 transition-opacity" />
-              <div className="relative space-y-2">
-                <h4 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-indigo-500">2+</h4>
-                <p className="text-sm text-neutral-400">Tools Available</p>
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-violet-500/20 to-indigo-500/20 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out blur-xl group-hover:blur-xl" />
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-violet-500/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-all duration-300" />
+              <div className="relative space-y-2 p-4 z-10">
+                <h4 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-indigo-500 transition-colors duration-300">2+</h4>
+                <p className="text-sm text-neutral-400 group-hover:text-neutral-200 transition-colors duration-300">Tools Available</p>
               </div>
             </motion.div>
 
             <motion.div 
-              className="relative group"
+              className="relative group cursor-pointer"
               whileHover={{ y: -5 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-violet-500/10 to-indigo-500/10 group-hover:opacity-100 opacity-0 transition-opacity" />
-              <div className="relative space-y-2">
-                <h4 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-indigo-500">100%</h4>
-                <p className="text-sm text-neutral-400">Free & Open Source</p>
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-violet-500/20 to-indigo-500/20 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out blur-xl group-hover:blur-xl" />
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-violet-500/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-all duration-300" />
+              <div className="relative space-y-2 p-4 z-10">
+                <h4 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-indigo-500 transition-colors duration-300">100%</h4>
+                <p className="text-sm text-neutral-400 group-hover:text-neutral-200 transition-colors duration-300">Free & Open Source</p>
               </div>
             </motion.div>
 
             <motion.div 
-              className="relative group"
+              className="relative group cursor-pointer"
               whileHover={{ y: -5 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-violet-500/10 to-indigo-500/10 group-hover:opacity-100 opacity-0 transition-opacity" />
-              <div className="relative space-y-2">
-                <h4 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-indigo-500">24/7</h4>
-                <p className="text-sm text-neutral-400">Availability</p>
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-violet-500/20 to-indigo-500/20 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out blur-xl group-hover:blur-xl" />
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-violet-500/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-all duration-300" />
+              <div className="relative space-y-2 p-4 z-10">
+                <h4 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-indigo-500 transition-colors duration-300">24/7</h4>
+                <p className="text-sm text-neutral-400 group-hover:text-neutral-200 transition-colors duration-300">Availability</p>
               </div>
             </motion.div>
 
             <motion.div 
-              className="relative group"
+              className="relative group cursor-pointer"
               whileHover={{ y: -5 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-violet-500/10 to-indigo-500/10 group-hover:opacity-100 opacity-0 transition-opacity" />
-              <div className="relative space-y-2">
-                <h4 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-indigo-500">Fast</h4>
-                <p className="text-sm text-neutral-400">Performance</p>
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-violet-500/20 to-indigo-500/20 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out blur-xl group-hover:blur-xl" />
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-violet-500/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-all duration-300" />
+              <div className="relative space-y-2 p-4 z-10">
+                <h4 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-indigo-500 transition-colors duration-300">Fast</h4>
+                <p className="text-sm text-neutral-400 group-hover:text-neutral-200 transition-colors duration-300">Performance</p>
               </div>
             </motion.div>
           </div>
