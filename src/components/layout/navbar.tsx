@@ -1,7 +1,9 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { Terminal } from "lucide-react";
 import Link from "next/link";
+import { Typewriter } from "../ui/typewriter";
 
 export const Navbar = () => {
   return (
@@ -9,9 +11,14 @@ export const Navbar = () => {
       "fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-2",
       "backdrop-blur-md bg-black/50"
     )}>
-      <Link href="/" className={cn("text-white text-xl font-bold")}>
-        Mini Tools
-      </Link>
+      <div className="flex items-center gap-2">
+        <div className="p-2 rounded-lg bg-blue-500/10">
+          <Terminal className="w-6 h-6 text-blue-500" />
+        </div>
+        <Link href="/" className={cn("text-white text-xl font-bold")}>
+          <Typewriter text="minitools.dev" className="text-xl font-bold" />
+        </Link>
+      </div>
       
       <div className={cn("flex items-center gap-4")}>
         <Link

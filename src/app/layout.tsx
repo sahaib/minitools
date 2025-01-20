@@ -7,8 +7,8 @@ import { Navbar } from "@/components/layout/navbar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Mini Tools",
-  description: "A collection of mini tools for developers",
+  title: "minitools.dev",
+  description: "A collection of mini tools for developers by Sahaib Singh",
 };
 
 export default function RootLayout({

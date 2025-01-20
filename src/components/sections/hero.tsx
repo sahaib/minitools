@@ -13,12 +13,12 @@ export const Hero = () => {
           className="text-6xl font-bold text-white sm:text-7xl bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-indigo-500"
         />
         <TextReveal
-          text="Developer Tools That Make Life Easier"
+          text="Developer & Daily Day Tools That Make Life Easier"
           className="mt-4 text-xl text-neutral-200 sm:text-2xl"
           delay={0.2}
         />
         <TextReveal
-          text="Streamline your workflow with our collection of powerful developer utilities"
+          text="Streamline your workflow with our collection of powerful developer & daily day tools"
           className="mt-4 text-lg text-neutral-400 max-w-2xl mx-auto"
           delay={0.4}
         />
