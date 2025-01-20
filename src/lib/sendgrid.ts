@@ -1,34 +1,44 @@
 import sgMail, { MailDataRequired } from "@sendgrid/mail";
 
-// Initialize SendGrid with API key
 if (!process.env.SENDGRID_API_KEY) {
-  console.error("SendGrid API key is not configured!");
+  throw new Error("SENDGRID_API_KEY is not set");
 }
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-export const sendWelcomeEmail = async (email: string) => {
-  if (!process.env.SENDGRID_API_KEY) {
-    console.error("SendGrid API key not configured");
-    throw new Error("Email service not configured");
+interface EmailData {
+  to: string;
+  subject: string;
+  html: string;
+  from?: string;
+}
+
+export async function sendEmail(data: EmailData) {
+  const msg: MailDataRequired = {
+    to: data.to,
+    from: data.from || "hello@minitools.dev",
+    subject: data.subject,
+    html: data.html,
+  };
+
+  try {
+    const response = await sgMail.send(msg);
+    return response;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`Failed to send email: ${error.message}`);
+    }
+    throw new Error("Failed to send email");
   }
+}
 
-  if (!process.env.SENDGRID_FROM_EMAIL) {
-    console.error("SendGrid from email not configured");
-    throw new Error("Sender email not configured");
-  }
-
+export async function sendWelcomeEmail(email: string) {
   const unsubscribeUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/unsubscribe?email=${encodeURIComponent(email)}`;
-
+  
   const msg: MailDataRequired = {
     to: email,
-    from: process.env.SENDGRID_FROM_EMAIL,
+    from: process.env.SENDGRID_FROM_EMAIL || "sahaiburrahman@gmail.com",
     subject: "Welcome to Mini Tools! 🚀",
-    trackingSettings: {
-      clickTracking: { enable: true },
-      openTracking: { enable: true },
-      subscriptionTracking: { enable: true },
-    },
     html: `
 <!DOCTYPE html>
 <html>
@@ -126,14 +136,12 @@ export const sendWelcomeEmail = async (email: string) => {
   };
 
   try {
-    const response = await sgMail.send(msg);
-    console.log("Email sent successfully:", response);
+    await sgMail.send(msg);
     return { success: true };
-  } catch (error: any) {
-    console.error("Error sending welcome email:", {
-      error: error.message,
-      response: error.response?.body,
-    });
-    throw new Error(error.message || "Failed to send welcome email");
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`Failed to send welcome email: ${error.message}`);
+    }
+    throw new Error("Failed to send welcome email");
   }
-}; 
+} 

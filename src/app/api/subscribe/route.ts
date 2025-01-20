@@ -21,23 +21,17 @@ export async function POST(request: Request) {
       );
     }
 
-    try {
-      await sendWelcomeEmail(email);
-      return NextResponse.json(
-        { message: "Successfully subscribed" },
-        { status: 200 }
-      );
-    } catch (emailError: any) {
-      console.error("Failed to send welcome email:", emailError);
-      return NextResponse.json(
-        { error: emailError.message || "Failed to send welcome email" },
-        { status: 500 }
-      );
-    }
-  } catch (error: any) {
-    console.error("Newsletter subscription error:", error);
+    await sendWelcomeEmail(email);
+
     return NextResponse.json(
-      { error: error.message || "Failed to subscribe" },
+      { message: "Successfully subscribed" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Newsletter subscription error:", error);
+    const errorMessage = error instanceof Error ? error.message : "Failed to subscribe";
+    return NextResponse.json(
+      { error: errorMessage },
       { status: 500 }
     );
   }

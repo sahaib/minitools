@@ -68,6 +68,117 @@ export const BackgroundBeamsWithCollision: React.FC<BackgroundBeamsWithCollision
     },
   ];
 
+  useEffect(() => {
+    const beams = document.createElement("canvas");
+    const context = beams.getContext("2d");
+    let animationFrameId: number;
+    
+    if (!parentRef.current || !context) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.target === parentRef.current) {
+          beams.width = entry.contentRect.width;
+          beams.height = entry.contentRect.height;
+        }
+      }
+    });
+
+    resizeObserver.observe(parentRef.current);
+    parentRef.current.appendChild(beams);
+
+    const particles: Particle[] = [];
+    const numParticles = 50;
+    const colors = ["#6366f1", "#8b5cf6", "#d946ef"];
+
+    class Particle {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      color: string;
+      radius: number;
+
+      constructor(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+        this.vx = Math.random() * 2 - 1;
+        this.vy = Math.random() * 2 - 1;
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.radius = Math.random() * 2 + 1;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < 0 || this.x > beams.width) this.vx *= -1;
+        if (this.y < 0 || this.y > beams.height) this.vy *= -1;
+      }
+
+      draw() {
+        if (!context) return;
+        context.beginPath();
+        context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        context.fillStyle = this.color;
+        context.fill();
+      }
+    }
+
+    for (let i = 0; i < numParticles; i++) {
+      particles.push(
+        new Particle(
+          Math.random() * beams.width,
+          Math.random() * beams.height
+        )
+      );
+    }
+
+    function connectParticles() {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 100) {
+            if (!context) return;
+            context.beginPath();
+            context.strokeStyle = particles[i].color;
+            context.globalAlpha = 1 - distance / 100;
+            context.lineWidth = 1;
+            context.moveTo(particles[i].x, particles[i].y);
+            context.lineTo(particles[j].x, particles[j].y);
+            context.stroke();
+          }
+        }
+      }
+    }
+
+    function animate() {
+      if (!context) return;
+      context.clearRect(0, 0, beams.width, beams.height);
+
+      particles.forEach((particle) => {
+        particle.update();
+        particle.draw();
+      });
+
+      connectParticles();
+      animationFrameId = requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    return () => {
+      if (parentRef.current) {
+        parentRef.current.removeChild(beams);
+      }
+      resizeObserver.disconnect();
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
   return (
     <div className={cn(
       "fixed inset-0 z-0 bg-gradient-to-b from-neutral-950 to-neutral-800 flex items-center w-full justify-center overflow-hidden",

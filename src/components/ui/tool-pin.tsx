@@ -4,6 +4,50 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
+interface ToolPinProps extends React.HTMLAttributes<HTMLDivElement> {
+  title: string;
+  description: string;
+  icon?: React.ReactNode;
+  className?: string;
+}
+
+export const ToolPin = React.forwardRef<HTMLDivElement, ToolPinProps>(
+  ({ title, description, icon, className, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "group relative overflow-hidden rounded-xl border border-white/10 bg-neutral-900/50 p-6 hover:border-white/20",
+          "transform-gpu transition-all duration-300 ease-in-out hover:-translate-y-1",
+          className
+        )}
+        {...props}
+      >
+        {/* Content */}
+        <div className="relative z-10 flex flex-col gap-4">
+          {/* Icon */}
+          {icon && (
+            <div className="size-12 rounded-full bg-neutral-800/50 p-3 text-white">
+              {icon}
+            </div>
+          )}
+
+          {/* Text */}
+          <div className="space-y-2">
+            <h3 className="text-xl font-semibold text-white">{title}</h3>
+            <p className="text-sm text-neutral-400">{description}</p>
+          </div>
+        </div>
+
+        {/* Gradient Background */}
+        <div className="absolute inset-0 z-0 bg-gradient-to-br from-violet-500/5 to-indigo-500/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      </div>
+    );
+  }
+);
+
+ToolPin.displayName = "ToolPin";
+
 export const PinContainer = ({
   children,
   title,
