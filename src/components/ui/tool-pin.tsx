@@ -47,7 +47,6 @@ export const ToolPin = React.forwardRef<HTMLDivElement, ToolPinProps>(
 );
 
 ToolPin.displayName = "ToolPin";
-
 export const PinContainer = ({
   children,
   title,
@@ -203,3 +202,4 @@ export const PinPerspective = ({
     </motion.div>
   );
 };
+

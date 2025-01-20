@@ -5,17 +5,22 @@ import Link from "next/link";
 
 export const Navbar = () => {
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-2 backdrop-blur-md bg-black/50">
-      <Link href="/" className="text-white text-xl font-bold">
+    <nav className={cn(
+      "fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-2",
+      "backdrop-blur-md bg-black/50"
+    )}>
+      <Link href="/" className={cn("text-white text-xl font-bold")}>
         Mini Tools
       </Link>
       
-      <div className="flex items-center gap-4">
+      <div className={cn("flex items-center gap-4")}>
         <Link
           href="https://github.com/sahaib"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-neutral-300 hover:text-white transition-colors"
+          className={cn(
+            "text-neutral-300 hover:text-white transition-colors"
+          )}
         >
           <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
             <path

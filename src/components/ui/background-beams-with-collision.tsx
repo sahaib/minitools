@@ -178,7 +178,7 @@ export const BackgroundBeamsWithCollision: React.FC<BackgroundBeamsWithCollision
       resizeObserver.disconnect();
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [parentRef]);
 
   return (
     <div className={cn(
