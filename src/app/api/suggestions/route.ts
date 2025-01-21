@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db, suggestions } from "@/lib/db";
 import { eq, and, gte } from "drizzle-orm";
+import { rateLimit } from "@/lib/rate-limit";
+import { sendWelcomeEmail } from "@/lib/sendgrid";
 
 // Schema for validation
 const suggestionSchema = z.object({
@@ -24,70 +26,49 @@ const suggestionSchema = z.object({
 });
 
 function getClientIp(request: Request): string {
-  const forwardedFor = request.headers.get('x-forwarded-for');
-  const realIp = request.headers.get('x-real-ip');
-  
+  const forwardedFor = request.headers.get("x-forwarded-for");
   if (forwardedFor) {
-    // Get the first IP if there are multiple
-    const ips = forwardedFor.split(',');
-    return ips[0].trim();
+    return forwardedFor.split(",")[0].trim();
   }
   
+  const realIp = request.headers.get("x-real-ip");
   if (realIp) {
     return realIp;
   }
   
-  return 'unknown';
+  return "127.0.0.1";
 }
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const { email, suggestion } = await request.json();
     const identifier = getClientIp(request);
 
-    // Validate input
-    const validatedData = suggestionSchema.parse(body);
-
-    // Check for duplicate suggestions from the same IP in the last hour
-    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
-    const recentSuggestions = await db.select()
-      .from(suggestions)
-      .where(
-        and(
-          eq(suggestions.ip, identifier),
-          gte(suggestions.createdAt, oneHourAgo)
-        )
-      );
-
-    if (recentSuggestions.length >= 5) {
+    const rateLimitResult = await rateLimit(identifier);
+    if (!rateLimitResult.success) {
       return NextResponse.json(
-        { error: "Too many suggestions. Please try again later." },
+        { 
+          error: `Rate limit exceeded. You can submit ${rateLimitResult.limit} suggestions per hour. Please try again later.` 
+        },
         { status: 429 }
       );
     }
 
-    // Store suggestion
     await db.insert(suggestions).values({
-      email: validatedData.email,
-      suggestion: validatedData.suggestion,
+      email,
+      suggestion,
       ip: identifier,
+      createdAt: new Date(),
     });
 
-    return NextResponse.json(
-      { message: "Suggestion received successfully" },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Suggestion submission error:", error);
-    
-    if (error instanceof z.ZodError) {
-      const errorMessage = error.errors[0]?.message || "Invalid input";
-      return NextResponse.json(
-        { error: errorMessage },
-        { status: 400 }
-      );
-    }
+    await sendWelcomeEmail(email);
 
+    return NextResponse.json({ 
+      message: "Suggestion submitted successfully",
+      remaining: rateLimitResult.remaining
+    });
+  } catch (error) {
+    console.error("Error submitting suggestion:", error);
     return NextResponse.json(
       { error: "Failed to submit suggestion" },
       { status: 500 }

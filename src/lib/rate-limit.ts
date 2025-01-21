@@ -1,29 +1,29 @@
-import { Redis } from "@upstash/redis";
-
-const redis = Redis.fromEnv();
+import { db, suggestions } from "./db";
+import { and, eq, gte } from "drizzle-orm";
 
 export async function rateLimit(identifier: string) {
-  const now = Date.now();
-  const key = `rate_limit:${identifier}`;
-  
-  // Rate limit: 5 requests per hour
-  const hourlyLimit = 5;
-  const hourlyWindow = 60 * 60 * 1000; // 1 hour in milliseconds
-
   try {
-    const reqs = await redis.get<number[]>(key) || [];
-    const recentReqs = reqs.filter(time => now - time < hourlyWindow);
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+    
+    // Count suggestions from this IP in the last hour
+    const recentSuggestions = await db.select()
+      .from(suggestions)
+      .where(
+        and(
+          eq(suggestions.ip, identifier),
+          gte(suggestions.createdAt, oneHourAgo)
+        )
+      );
 
-    if (recentReqs.length >= hourlyLimit) {
-      return { success: false };
-    }
-
-    recentReqs.push(now);
-    await redis.set(key, recentReqs, { ex: 60 * 60 }); // Expire after 1 hour
-    return { success: true };
+    return { 
+      success: recentSuggestions.length < 5,
+      current: recentSuggestions.length,
+      limit: 5,
+      remaining: Math.max(0, 5 - recentSuggestions.length)
+    };
   } catch (error) {
-    console.error("Rate limit error:", error);
-    // If Redis fails, we'll still allow the request
-    return { success: true };
+    console.error("Rate limit check failed:", error);
+    // If check fails, allow the request
+    return { success: true, current: 0, limit: 5, remaining: 5 };
   }
 } 
