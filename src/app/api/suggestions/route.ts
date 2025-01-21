@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db, suggestions } from "@/lib/db";
-import { eq, and, gte } from "drizzle-orm";
 import { rateLimit } from "@/lib/rate-limit";
 import { sendWelcomeEmail } from "@/lib/sendgrid";
 
@@ -41,8 +40,11 @@ function getClientIp(request: Request): string {
 
 export async function POST(request: Request) {
   try {
-    const { email, suggestion } = await request.json();
+    const body = await request.json();
     const identifier = getClientIp(request);
+
+    // Validate input
+    const { email, suggestion } = suggestionSchema.parse(body);
 
     const rateLimitResult = await rateLimit(identifier);
     if (!rateLimitResult.success) {
@@ -69,6 +71,15 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Error submitting suggestion:", error);
+    
+    if (error instanceof z.ZodError) {
+      const errorMessage = error.errors[0]?.message || "Invalid input";
+      return NextResponse.json(
+        { error: errorMessage },
+        { status: 400 }
+      );
+    }
+
     return NextResponse.json(
       { error: "Failed to submit suggestion" },
       { status: 500 }

@@ -187,17 +187,17 @@ export const BackgroundBeamsWithCollision: React.FC<BackgroundBeamsWithCollision
       animate();
 
       return () => {
-        if (parent && beams) {
-          parent.removeChild(beams);
-        }
         resizeObserver.disconnect();
         cancelAnimationFrame(animationFrameId);
+        if (parent.contains(beams)) {
+          parent.removeChild(beams);
+        }
       };
     };
 
     const cleanup = setupCanvas();
     return () => cleanup && cleanup();
-  }, [parentRef]);
+  }, []);
 
   return (
     <div className={cn(
