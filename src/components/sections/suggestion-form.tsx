@@ -58,7 +58,7 @@ export const SuggestionForm = () => {
             Suggest a Tool
           </h2>
           <p className="mt-4 text-neutral-400">
-            Have an idea for a tool? Let us know what you'd like to see next!
+            Have an idea for a tool? Let us know what you&apos;d like to see next!
           </p>
         </div>
 

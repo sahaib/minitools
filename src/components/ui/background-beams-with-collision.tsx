@@ -81,15 +81,15 @@ export const BackgroundBeamsWithCollision: React.FC<BackgroundBeamsWithCollision
   ];
 
   useEffect(() => {
-    if (!parentRef.current) return;
+    const parent = parentRef.current;
+    if (!parent) return;
 
     const setupCanvas = () => {
       const beams = document.createElement("canvas");
       const context = beams.getContext("2d");
       let animationFrameId: number;
-      const parent = parentRef.current;
       
-      if (!parent || !context) return () => {};
+      if (!context) return () => {};
 
       const resizeObserver = new ResizeObserver((entries) => {
         for (const entry of entries) {
@@ -197,7 +197,7 @@ export const BackgroundBeamsWithCollision: React.FC<BackgroundBeamsWithCollision
 
     const cleanup = setupCanvas();
     return () => cleanup && cleanup();
-  }, []);
+  }, [parentRef]);
 
   return (
     <div className={cn(
