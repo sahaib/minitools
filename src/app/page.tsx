@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/layout/navbar";
 import { Hero } from "@/components/sections/hero";
 import { Tools } from "@/components/sections/tools";
+import { SuggestionForm } from "@/components/sections/suggestion-form";
 import { Footer } from "@/components/layout/footer";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
@@ -12,6 +13,7 @@ export default function Home() {
         <Navbar />
         <Hero />
         <Tools />
+        <SuggestionForm />
         <Footer />
       </div>
     </main>
